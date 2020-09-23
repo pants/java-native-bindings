@@ -1,0 +1,1 @@
+A program used to generate JNI bindings for use by native java agents.
