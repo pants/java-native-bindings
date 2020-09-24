@@ -19,7 +19,7 @@ public class ClassIndex implements FileGenerator {
     }
 
     public void generate(PrintWriter pw, List<ClassMap> classMaps) {
-        var res = getClass().getResource("templates/v1/" + fileName());
+        var res = getClass().getResource("/templates/v1/" + fileName());
         try {
             Files.readAllLines(new File(res.toURI()).toPath()).forEach(s -> {
                 if (s.equals("<generate>")) {
