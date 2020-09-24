@@ -39,30 +39,35 @@ public class MemberMap {
         return cleanName;
     }
 
-    public String getCleanMethodSignature(final List<ClassMap> classes) {
-        final String methodSig = getObfuscatedSignature();
+    public String getCleanSignature(final List<ClassMap> classes) {
+        final String signature = getObfuscatedSignature();
         final StringBuilder cleanSig = new StringBuilder();
 
-        final String signatureArgs = methodSig.substring(1).split("\\)")[0];
-        final String signatureRet = methodSig.substring(0, methodSig.indexOf(")") - 1);
+        boolean inClass = false;
+        StringBuilder classNameBuilder = new StringBuilder();
 
-        cleanSig.append("(");
+        for (int i = 0; i < signature.length(); i++) {
+            char c = signature.charAt(i);
+            if (c == 'L' && !inClass) {
+                inClass = true;
+            } else if (c == ';' && inClass) {
+                final String classReference = classNameBuilder.toString();
 
-        int index = 0;
-        char firstChar = signatureArgs.charAt(0);
-        while ((firstChar = signatureArgs.charAt(index++)) != ')') {
-            switch (firstChar) {
-                case 'L':
-                    //handle class
-                    signatureArgs.substring(index, signatureArgs.indexOf(";", index));
-                    break;
-                default:
-                    cleanSig.append(firstChar);
+                final var classStream = classes.stream();
+                final var filteredClasses = classStream.filter(cm -> cm.getObfuscatedName().equals(classReference));
+                final var optionalClassMap = filteredClasses.findFirst();
+                final var classToAppend = optionalClassMap.map(ClassMap::getCleanName).orElse(classNameBuilder.toString());
+
+                cleanSig.append(classToAppend);
+                inClass = false;
+                classNameBuilder = new StringBuilder();
+            } else if (inClass) {
+                classNameBuilder.append(c);
+                continue;
             }
+
+            cleanSig.append(c);
         }
-
-        cleanSig.append(")");
-
 
         return cleanSig.toString();
     }
