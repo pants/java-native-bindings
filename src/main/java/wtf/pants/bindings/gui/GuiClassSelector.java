@@ -2,9 +2,12 @@ package wtf.pants.bindings.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wtf.pants.bindings.mappings.ClassMap;
 import wtf.pants.bindings.mappings.loaders.MappingLoader;
@@ -30,29 +33,34 @@ public class GuiClassSelector extends Application {
 
     private void setupEvents() {
         controller.importTreeView.setOnMouseClicked(controller::onImportTreeItemClicked);
+        controller.generateBindings.setOnAction(controller::onGenerateBindingsClicked);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        HBox hbox = new HBox();
+        final VBox mainLayout = new VBox();
 
-        TreeItem<String> treeItem = new TreeItem<>("Classes");
+        mainLayout.getChildren().add(controller.menuBar);
 
-        Map<String, TreeItem<String>> treeItemMap = new HashMap<>();
+        //Add class selector tree views
+        final HBox classSelectorHBox = new HBox();
 
         for (ClassMap classMap : loadMappings()) {
             controller.addToTree(controller.importTreeView, classMap);
         }
 
-        hbox.getChildren().add(controller.importTreeView);
-        hbox.getChildren().add(controller.exportTreeView);
+        classSelectorHBox.getChildren().add(controller.importTreeView);
+        classSelectorHBox.getChildren().add(controller.exportTreeView);
 
         HBox.setHgrow(controller.importTreeView, Priority.ALWAYS);
         HBox.setHgrow(controller.exportTreeView, Priority.ALWAYS);
 
+        mainLayout.getChildren().add(classSelectorHBox);
+        VBox.setVgrow(classSelectorHBox, Priority.ALWAYS);
+
         setupEvents();
 
-        Scene scene = new Scene(hbox, 640, 480);
+        Scene scene = new Scene(mainLayout, 1280, 720);
         stage.setScene(scene);
         stage.show();
     }
