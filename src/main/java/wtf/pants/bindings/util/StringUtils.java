@@ -21,7 +21,11 @@ public class StringUtils {
         return snake_case.toString();
     }
 
-    public static String getJNIReturnFromSignature(final String signature) {
+    public static String getJNIReturnFromSignature(String signature) {
+        if(signature.startsWith("(")){
+            signature = signature.split("\\)")[1];
+        }
+
         switch (signature.charAt(0)) {
             case 'Z':
                 return "jboolean";

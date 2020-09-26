@@ -24,6 +24,7 @@ public class StringUtilsTest {
         final String testObjectSignature = "Ljava/lang/String;";
         final String testFloatSignature = "F";
         final String testBooleanArraySignature = "[Z";
+        final String testMethodSignature = "(FFI)[I";
 
         final String expectedObjectReturnType = "jobject";
         final String actualObjectReturnType = StringUtils.getJNIReturnFromSignature(testObjectSignature);
@@ -36,6 +37,10 @@ public class StringUtilsTest {
         final String expectedBoolArrayType = "jbooleanArray";
         final String actualBoolArrayType = StringUtils.getJNIReturnFromSignature(testBooleanArraySignature);
         assertEquals(expectedBoolArrayType, actualBoolArrayType);
+
+        final String expectedMethodRetType = "jintArray";
+        final String actualMethodRetType = StringUtils.getJNIReturnFromSignature(testMethodSignature);
+        assertEquals(expectedMethodRetType, actualMethodRetType);
     }
 
 }
