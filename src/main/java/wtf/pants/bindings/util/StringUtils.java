@@ -20,4 +20,30 @@ public class StringUtils {
 
         return snake_case.toString();
     }
+
+    public static String getJNIReturnFromSignature(final String signature) {
+        switch (signature.charAt(0)) {
+            case 'Z':
+                return "jboolean";
+            case 'B':
+                return "jbyte";
+            case 'C':
+                return "jchar";
+            case 'S':
+                return "jshort";
+            case 'I':
+                return "jint";
+            case 'J':
+                return "jlong";
+            case 'F':
+                return "jfloat";
+            case 'D':
+                return "jdouble";
+            case '[':
+                return getJNIReturnFromSignature(signature.substring(1)) + "Array";
+            case 'L':
+            default:
+                return "jobject";
+        }
+    }
 }
