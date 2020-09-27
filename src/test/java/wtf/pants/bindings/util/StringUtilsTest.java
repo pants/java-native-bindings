@@ -11,8 +11,9 @@ public class StringUtilsTest {
         final String expectedCase = "upper_camel_case";
 
         //assert the conversion works
+        final String expectedCamelCase = "camel_case";
         final String actualCamelCase = StringUtils.camelToSnake("camelCase");
-        assertEquals(expectedCase, actualCamelCase);
+        assertEquals(expectedCamelCase, actualCamelCase);
 
         //asset that it also works with UpperCamelCsse
         final String actualUpperCamelCase = StringUtils.camelToSnake("UpperCamelCase");
@@ -24,23 +25,18 @@ public class StringUtilsTest {
         final String testObjectSignature = "Ljava/lang/String;";
         final String testFloatSignature = "F";
         final String testBooleanArraySignature = "[Z";
-        final String testMethodSignature = "(FFI)[I";
 
         final String expectedObjectReturnType = "jobject";
-        final String actualObjectReturnType = StringUtils.getJNIReturnFromSignature(testObjectSignature);
+        final String actualObjectReturnType = StringUtils.getJNITypeFromBytecode(testObjectSignature);
         assertEquals(expectedObjectReturnType, actualObjectReturnType);
 
         final String expectedFloatReturnType = "jfloat";
-        final String actualFloatReturnType = StringUtils.getJNIReturnFromSignature(testFloatSignature);
+        final String actualFloatReturnType = StringUtils.getJNITypeFromBytecode(testFloatSignature);
         assertEquals(expectedFloatReturnType, actualFloatReturnType);
 
         final String expectedBoolArrayType = "jbooleanArray";
-        final String actualBoolArrayType = StringUtils.getJNIReturnFromSignature(testBooleanArraySignature);
+        final String actualBoolArrayType = StringUtils.getJNITypeFromBytecode(testBooleanArraySignature);
         assertEquals(expectedBoolArrayType, actualBoolArrayType);
-
-        final String expectedMethodRetType = "jintArray";
-        final String actualMethodRetType = StringUtils.getJNIReturnFromSignature(testMethodSignature);
-        assertEquals(expectedMethodRetType, actualMethodRetType);
     }
 
 }
