@@ -23,7 +23,7 @@ public interface FileGenerator {
                 return null;
             }
 
-            return new PrintWriter(new File(fileName()));
+            return new PrintWriter(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
