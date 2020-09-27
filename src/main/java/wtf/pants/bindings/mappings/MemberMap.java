@@ -1,7 +1,10 @@
 package wtf.pants.bindings.mappings;
 
+import wtf.pants.bindings.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MemberMap {
 
@@ -13,6 +16,7 @@ public class MemberMap {
 
     private final List<String> params = new ArrayList<>();
 
+    @AssignedAtGeneration
     private boolean isStatic = false;
 
     public MemberMap(boolean method, String obfuscatedMethodSignature, String obfuscatedName, String intermediateName, String cleanName) {
@@ -86,5 +90,22 @@ public class MemberMap {
 
     public void setStatic(boolean aStatic) {
         isStatic = aStatic;
+    }
+
+    public String getJNIReturnClass(List<ClassMap> classMaps) {
+        String signature = getObfuscatedSignature();
+        if (signature.startsWith("(")) {
+            signature = signature.split("\\)")[1];
+        }
+
+        if (signature.charAt(0) == 'L') {
+            final String classType = signature.substring(1, signature.lastIndexOf(";"));
+            final Optional<ClassMap> deobfuscatedClass = ClassMap.deobfuscateClassName(classType, classMaps);
+            if (deobfuscatedClass.isPresent()) {
+                return deobfuscatedClass.get().getCleanClassName();
+            }
+        }
+
+        return StringUtils.getJNITypeFromBytecode(signature);
     }
 }

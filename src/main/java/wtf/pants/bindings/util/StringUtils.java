@@ -23,18 +23,14 @@ public class StringUtils {
     }
 
     /**
-     * Converts a field or method signature into a JNI type (eg: jint, jlong)
+     * Converts a bytecode type into a JNI type (eg: jint, jlong)
      * In the case of 'V' (void), just return void.
      *
-     * @param signature The signature to convert (eg: (II)V
+     * @param bytecodeType The type to convert (eg: F, Z, D)
      * @return Returns JNI type as a string
      */
-    public static String getJNIReturnFromSignature(String signature) {
-        if (signature.startsWith("(")) {
-            signature = signature.split("\\)")[1];
-        }
-
-        switch (signature.charAt(0)) {
+    public static String getJNITypeFromBytecode(String bytecodeType) {
+        switch (bytecodeType.charAt(0)) {
             case 'Z':
                 return "jboolean";
             case 'B':
@@ -52,7 +48,7 @@ public class StringUtils {
             case 'D':
                 return "jdouble";
             case '[':
-                return getJNIReturnFromSignature(signature.substring(1)) + "Array";
+                return getJNITypeFromBytecode(bytecodeType.substring(1)) + "Array";
             case 'V':
                 return "void";
             case 'L':

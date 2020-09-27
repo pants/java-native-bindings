@@ -2,10 +2,11 @@ package wtf.pants.bindings.gui;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import wtf.pants.bindings.generators.v1.ClassHeader;
 import wtf.pants.bindings.generators.v1.ClassIndex;
+import wtf.pants.bindings.generators.v1.Format01Generator;
 import wtf.pants.bindings.gui.entries.ClassTreeEntry;
 import wtf.pants.bindings.gui.entries.PathTreeEntry;
 import wtf.pants.bindings.gui.entries.TreeEntry;
@@ -13,12 +14,10 @@ import wtf.pants.bindings.mappings.ClassMap;
 import wtf.pants.bindings.util.Functional;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,6 +85,11 @@ public class ClassSelectorController {
     }
 
     public void onGenerateBindingsClicked(ActionEvent actionEvent) {
+        final List<ClassMap> selectedClassMaps = new ArrayList<>();
+        final var rootChildren = exportTreeView.getRoot().getChildren();
+        final var classMaps = walkTreeViewChildren(rootChildren);
 
+        Format01Generator generator = new Format01Generator();
+        generator.generateFiles(classMaps);
     }
 }
