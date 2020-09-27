@@ -11,6 +11,17 @@ public interface FileGenerator {
 
     void generate(PrintWriter pw, List<ClassMap> classMaps);
 
+    default void generateFile(List<ClassMap> classMaps) {
+        final PrintWriter classIndexPrintWriter = createPrintWriter();
+        if (classIndexPrintWriter == null) {
+            System.out.println("Failed on generator " + getClass().getName());
+            return;
+        }
+        generate(classIndexPrintWriter, classMaps);
+        classIndexPrintWriter.flush();
+        classIndexPrintWriter.close();
+    }
+
     default PrintWriter createPrintWriter() {
         try {
             final File file = new File("target/" + fileName());
